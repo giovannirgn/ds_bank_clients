@@ -1,8 +1,34 @@
+import numpy as np
 import pandas as pd
+import streamlit as st
+from categorical_fetures_dict import features_dic
 
-df = pd.read_csv("dataset.csv",sep=",")
+static_df = pd.read_csv("dataset.csv",sep=",")
+
+df = static_df.copy()
 df.set_index("CLIENTNUM",inplace=True,drop=True)
 df = df.iloc[:,:-4].drop(["Avg_Open_To_Buy", "Total_Amt_Chng_Q4_Q1"],axis=1)
 
 
-print(df.columns)
+df.replace(features_dic,inplace=True)
+df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
+
+
+
+
+
+
+st.header('Clients Classification')
+st.write("Who will close the account?")
+st.write('Dataset source: www.kaggle.com/sakshigoyal7/credit-card-customers')
+
+
+st.sidebar.subheader('Controls')
+show_raw_data = st.sidebar.checkbox('Show raw data')
+
+if show_raw_data:
+    st.subheader('Raw data')
+    st.write(df)
+
+
+
