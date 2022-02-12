@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from categorical_fetures_dict import features_dic
-from graph_functions import pie, scatter, info
+from graph_functions import pie, scatter, info, describe, mean_graph
 
 
 
@@ -12,7 +12,7 @@ static_df = pd.read_csv("dataset.csv",sep=",")
 df = static_df.copy()
 df.set_index("CLIENTNUM",inplace=True,drop=True)
 df = df.iloc[:,:-4].drop(["Avg_Open_To_Buy", "Total_Amt_Chng_Q4_Q1"],axis=1)
-
+pre_replacement = df.copy()
 df.replace(features_dic,inplace=True)
 df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
 
@@ -24,6 +24,14 @@ df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
 st.header('Clients Classification')
 st.write("Who will close the account?")
 st.write('Dataset source: www.kaggle.com/sakshigoyal7/credit-card-customers')
+
+stats, mean_by_groups = describe(pre_replacement,"Attrition_Flag")
+
+#st.write(mean_by_groups)
+
+
+
+st.write(mean_graph(stats, mean_by_groups,[0,2,9],[6,7,8],[1,3,4,5]))
 
 
 st.sidebar.subheader('Controls')
