@@ -1,11 +1,13 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import inspect
 
-from categorical_fetures_dict import features_dic,text1, text2
+
 from graph_functions import pie, scatter, info, describe, mean_graph, plot_density, corr_heatmap
+from model_functions import  random_set, features_and_target_arrays
 from some_functions import type_of_attribute, get_correlation
-
+from categorical_fetures_dict import features_dic,text1, text2
 
 
 static_df = pd.read_csv("dataset.csv",sep=",")
@@ -25,15 +27,6 @@ df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
 st.header('Clients Classification')
 st.write("Who will close the account?")
 st.write('Dataset source: www.kaggle.com/sakshigoyal7/credit-card-customers')
-
-stats, mean_by_groups = describe(pre_replacement,"Attrition_Flag")
-
-
-
-
-
-
-
 
 st.sidebar.subheader('Controls')
 explore_checkbok = st.sidebar.checkbox('Expolre dataset')
@@ -63,7 +56,7 @@ if explore_checkbok:
         show_features = st.checkbox('Categorical attributes encoding')
 
         if show_features:
-            st.write(features_dic)
+            st.json(features_dic)
 
 
         show_target = st.checkbox('Show Target')
@@ -75,13 +68,17 @@ if explore_checkbok:
 
     if graph_checkbox:
 
+
         barchart_checkbox = st.sidebar.checkbox('Barchart')
 
         if barchart_checkbox:
 
+            stats, mean_by_groups = describe(pre_replacement, "Attrition_Flag")
+
             st.write(mean_graph(stats, mean_by_groups, [0, 2, 9], [6, 7, 8], [1, 3, 4, 5]))
 
             st.write(text1)
+
 
         scatter_checkbox = st.sidebar.checkbox('Scatterplot')
 
@@ -90,6 +87,7 @@ if explore_checkbok:
             if graph_checkbox:
 
                 st.write("Choose two variables")
+
                 multi_chosen = st.multiselect('Variables:', df.columns)
 
                 if len(multi_chosen) == 2:
@@ -97,6 +95,7 @@ if explore_checkbok:
                     st.write(scatter(df,multi_chosen[0],multi_chosen[1]))
 
                     st.write()
+
 
         density_checkbox = st.sidebar.checkbox('Density')
 
@@ -110,23 +109,65 @@ if explore_checkbok:
 
             st.write(plot_density(pre_replacement[numeric_features],variable_density,"Attrition_Flag"))
 
+
+
         correlation_checkbox = st.sidebar.checkbox('Correlation')
 
         if correlation_checkbox:
 
             st.write(corr_heatmap(df))
+
             st.write(text2)
+
             st.write(get_correlation(df,"Attrition_Flag"))
 
 
 
 
-
-
-
-
-
-
-
-
 model_checkbox = st.sidebar.checkbox('Model')
+
+if model_checkbox:
+
+    random_checkbox = st.sidebar.checkbox('Random sample')
+
+    if random_checkbox:
+
+
+
+        show_code = st.checkbox('Code')
+
+        if show_code:
+
+            st.code(inspect.getsource(random_set),language="python")
+
+
+    test_checkbox = st.sidebar.checkbox('Test')
+
+    if test_checkbox:
+
+
+        st.write("Choose attributes and target")
+
+        att_chosen = st.multiselect('Variables:', df.columns)
+
+        m_df = df[att_chosen].copy()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
