@@ -73,9 +73,9 @@ def groupby_target_graph(stats,mean_by_groups,index,i):
     sub = plt.subplot(1, 3, i)
 
 
-    rects1 = plt.bar(x - width, att_value, width, label='Attrited Customer', color=att_color)
-    rects2 = plt.bar(x, mean_value, width, label='Sample Mean', color=mean_color)
-    rects3 = plt.bar(x + width, exi_value, width, label='Existing Customer', color=ex_color)
+    rects1 = plt.bar(x - width, att_value, width, label='Attrited Customer', color=att_color,edgecolor = "w", linewidth=4 )
+    rects2 = plt.bar(x, mean_value, width, label='Sample Mean', color=mean_color,edgecolor = "w",linewidth=4 )
+    rects3 = plt.bar(x + width, exi_value, width, label='Existing Customer', color=ex_color,edgecolor = "w",linewidth=4)
 
 
 
@@ -94,11 +94,11 @@ def mean_graph(stats, mean_by_groups,index_1,index_2,index_3):
 
     index = [index_1,index_2,index_3]
 
-    fig = plt.figure(figsize=(15, 8))
+    fig = plt.figure(figsize=(13, 8))
 
 
 
-    fig.suptitle("Numeric attributes'mean comparison between attrited clients and existing clients", fontsize=15)
+    fig.suptitle("Differences between the means", fontsize=16)
 
     for i in range(3):
 

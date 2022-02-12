@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from categorical_fetures_dict import features_dic
+from categorical_fetures_dict import features_dic ,text1
 from graph_functions import pie, scatter, info, describe, mean_graph
 
 
@@ -27,11 +27,11 @@ st.write('Dataset source: www.kaggle.com/sakshigoyal7/credit-card-customers')
 
 stats, mean_by_groups = describe(pre_replacement,"Attrition_Flag")
 
-#st.write(mean_by_groups)
 
 
 
-st.write(mean_graph(stats, mean_by_groups,[0,2,9],[6,7,8],[1,3,4,5]))
+
+
 
 
 st.sidebar.subheader('Controls')
@@ -74,6 +74,14 @@ if explore_checkbok:
 
     if graph_checkbox:
 
+        barchart_checkbox = st.sidebar.checkbox('Barchart')
+
+        if barchart_checkbox:
+
+            st.write(mean_graph(stats, mean_by_groups, [0, 2, 9], [6, 7, 8], [1, 3, 4, 5]))
+
+            st.write(text1)
+
         scatter_checkbox = st.sidebar.checkbox('Scatterplot')
 
         if scatter_checkbox:
@@ -81,11 +89,16 @@ if explore_checkbok:
             if graph_checkbox:
 
                 st.sidebar.write("Choose two variables")
-                multi_chosen = st.sidebar.multiselect('Select your vehicle:', df.columns)
+                multi_chosen = st.sidebar.multiselect('Variables:', df.columns)
 
                 if len(multi_chosen) == 2:
 
                     st.write(scatter(df,multi_chosen[0],multi_chosen[1]))
+
+                    st.write()
+
+
+
 
 
 model_checkbox = st.sidebar.checkbox('Model')

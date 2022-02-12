@@ -49,3 +49,12 @@ features_dic = {
                 'F': 2
 
                 }
+
+
+text1 = "The clients that leaves the bank, on avarage, use their card less than clients that will stay"
+text2 = "Bad clients have an avarage total transaction amount lower than good ones"
+text3 = "Bad clients use on avarage less services than good ones"
+text4 = "Bad clients have more inactive period than good ones but also more calls done to the customer care"
+
+
+
