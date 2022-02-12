@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from categorical_fetures_dict import features_dic ,text1
-from graph_functions import pie, scatter, info, describe, mean_graph
+from categorical_fetures_dict import features_dic,text1, text2
+from graph_functions import pie, scatter, info, describe, mean_graph, plot_density, corr_heatmap
+from some_functions import type_of_attribute, get_correlation
 
 
 
@@ -88,14 +89,41 @@ if explore_checkbok:
 
             if graph_checkbox:
 
-                st.sidebar.write("Choose two variables")
-                multi_chosen = st.sidebar.multiselect('Variables:', df.columns)
+                st.write("Choose two variables")
+                multi_chosen = st.multiselect('Variables:', df.columns)
 
                 if len(multi_chosen) == 2:
 
                     st.write(scatter(df,multi_chosen[0],multi_chosen[1]))
 
                     st.write()
+
+        density_checkbox = st.sidebar.checkbox('Density')
+
+        if density_checkbox:
+
+            st.sidebar.write("Choose the variable")
+
+            numeric_features, label_features = type_of_attribute(pre_replacement)
+
+            variable_density = st.selectbox("List of numeric variables",pre_replacement[numeric_features].columns.drop("Attrition_Flag"))
+
+            st.write(plot_density(pre_replacement[numeric_features],variable_density,"Attrition_Flag"))
+
+        correlation_checkbox = st.sidebar.checkbox('Correlation')
+
+        if correlation_checkbox:
+
+            st.write(corr_heatmap(df))
+            st.write(text2)
+            st.write(get_correlation(df,"Attrition_Flag"))
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 import numpy as np
 import io
@@ -111,6 +112,21 @@ def mean_graph(stats, mean_by_groups,index_1,index_2,index_3):
     return fig
 
 
+def plot_density(df,variable,target):
+
+    density = plt.figure(figsize = (10,6))
+
+    sns.kdeplot(data=df, x=variable, hue=target, fill=True, common_norm=False, alpha=0.4)
+
+    return density
+
+
+def corr_heatmap(df):
+
+    corr = df.corr()
+    fig = plt.figure(figsize=(12, 8))
+    sns.heatmap(corr)
+    return fig
 
 
 
