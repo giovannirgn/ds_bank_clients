@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from categorical_fetures_dict import features_dic
-from graph_functions import pie, scatter
+from graph_functions import pie, scatter, info
 
 
 
@@ -27,27 +27,57 @@ st.write('Dataset source: www.kaggle.com/sakshigoyal7/credit-card-customers')
 
 
 st.sidebar.subheader('Controls')
-
-show_raw_data = st.sidebar.checkbox('Show raw data')
-show_target = st.sidebar.checkbox('Show Target')
-show_variables = st.sidebar.checkbox('Choose variables')
+explore_checkbok = st.sidebar.checkbox('Expolre dataset')
 
 
 
 
-if show_raw_data:
-    st.subheader('Raw data')
-    st.write(df)
+
+if explore_checkbok:
+
+    show_raw_data = st.sidebar.checkbox('Show raw data')
+
+    graph_checkbox  = st.sidebar.checkbox('Visualization')
 
 
-if show_target:
-    st.write(pie(static_df,"Attrition_Flag",["#4c758c","#e66c96"]))
+    if show_raw_data:
 
 
-if show_variables:
+        st.subheader('Raw data')
+        st.write(df)
 
-    st.sidebar.write("Choose two variables")
-    multi_chosen = st.sidebar.multiselect('Select your vehicle:', df.columns)
+        show_info = st.checkbox('Info')
 
-    if len(multi_chosen) == 2:
-        st.write(scatter(df,multi_chosen[0],multi_chosen[1]))
+        if show_info:
+            st.text(info(df))
+
+        show_features = st.checkbox('Categorical attributes encoding')
+
+        if show_features:
+            st.write(features_dic)
+
+
+        show_target = st.checkbox('Show Target')
+
+
+        if show_target:
+            st.write(pie(static_df,"Attrition_Flag",["#4c758c","#e66c96"]))
+
+
+    if graph_checkbox:
+
+        scatter_checkbox = st.sidebar.checkbox('Scatterplot')
+
+        if scatter_checkbox:
+
+            if graph_checkbox:
+
+                st.sidebar.write("Choose two variables")
+                multi_chosen = st.sidebar.multiselect('Select your vehicle:', df.columns)
+
+                if len(multi_chosen) == 2:
+
+                    st.write(scatter(df,multi_chosen[0],multi_chosen[1]))
+
+
+model_checkbox = st.sidebar.checkbox('Model')

@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+import io
 from collections import Counter,OrderedDict
+
 
 def pie(df,col,clrs):
 
@@ -27,4 +29,25 @@ def scatter(df,col_1,col_2):
     plt.ylabel(col_2)
 
     return fig
+
+
+
+
+def describe(df, target):
+
+    stats = df.describe().T
+    group_by_group = df.groupby(by=target)
+    mean_by_groups = group_by_attrition.mean().T
+
+    return stats, mean_by_groups
+
+
+
+def info(df):
+
+    buffer = io.StringIO()
+    df.info(buf=buffer)
+    s = buffer.getvalue()
+
+    return s
 
