@@ -2,12 +2,11 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import inspect
-
 from sklearn.ensemble import RandomForestClassifier
-
+import pickle
 
 from graph_functions import pie, scatter, info, describe, mean_graph, plot_density, corr_heatmap
-from model_functions import random_sample,iter_model
+from model_functions import random_sample,iter_model,select_random_index, predict
 from some_functions import type_of_attribute, get_correlation
 from categorical_fetures_dict import features_dic,text1, text2
 
@@ -20,7 +19,6 @@ df = df.iloc[:,:-4].drop(["Avg_Open_To_Buy", "Total_Amt_Chng_Q4_Q1"],axis=1)
 pre_replacement = df.copy()
 df.replace(features_dic,inplace=True)
 df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
-
 
 
 st.header('Clients Classification')
@@ -45,13 +43,13 @@ if explore_checkbok:
 
 
         st.subheader('Raw data')
-        st.write(df)
+        st.write(pre_replacement)
 
         show_info = st.checkbox('Info')
 
         if show_info:
 
-            st.text(info(df))
+            st.text(info(pre_replacement))
 
         show_features = st.checkbox('Categorical attributes encoding')
 
@@ -163,8 +161,8 @@ if model_checkbox:
 
         training_button = st.button("Train")
 
-
         if training_button:
+
 
             with st.spinner("Learning..."):
 
@@ -199,12 +197,6 @@ if model_checkbox:
 
 
 
-
-
-
-
-
-
                 st.write(f"Mean of the accuracies: {np.array(acc).mean()}")
 
 
@@ -212,6 +204,29 @@ if model_checkbox:
 
 
                 st.write(f"Mean of the percentage  right 1 predictions: {np.array(angry_predict_really_angry).mean()}")
+
+                pickle.dump(random_forest, open("model", 'wb'))
+
+
+
+    random_row_button = st.checkbox("Select random clients")
+
+    model  = pickle.load(open("model", 'rb'))
+
+    if random_row_button:
+
+        sample_df, x, y = select_random_index(df,att_chosen,"Attrition_Flag")
+
+        counter = 0
+        for test_ in x:
+
+            pred = predict(test_.reshape(1,-1),model)
+
+            st.write(f"Client ID {sample_df.index[counter]}")
+            st.write(f"Predict: {pred}")
+            st.write(f"Actual: {y[counter]}")
+            counter +=1
+
 
 
 

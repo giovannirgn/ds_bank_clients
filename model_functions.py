@@ -56,7 +56,6 @@ def features_and_target_arrays(df,target):
 
 
 
-
 def train_test(x,y,test_size= 0.9,random_state=1):
 
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = test_size, random_state=random_state)
@@ -86,3 +85,30 @@ def iter_model(df, target, zeros_size, ones_size, model):
   accuracy, confusion_mat = train_model(x_train, y_train, x_test, y_test, model)
 
   return accuracy, confusion_mat
+
+
+
+def select_random_index(df,list_of_variables,target):
+
+  sel_df = df[list_of_variables].copy()
+
+  pos =  sel_df[sel_df["Attrition_Flag"]==1].sample(n=5)
+  neg = sel_df[sel_df["Attrition_Flag"]==0].sample(n=5)
+
+  c = pd.concat([pos,neg])
+
+  x =c.drop(target,axis=1).values
+  y = c[target].values
+
+  return c, x, y
+
+
+def predict(x,model):
+
+  y_pred = model.predict(x)
+
+  return y_pred
+
+
+
+
