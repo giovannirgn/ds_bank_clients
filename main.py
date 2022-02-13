@@ -3,9 +3,11 @@ import pandas as pd
 import streamlit as st
 import inspect
 
+from sklearn.ensemble import RandomForestClassifier
+
 
 from graph_functions import pie, scatter, info, describe, mean_graph, plot_density, corr_heatmap
-from model_functions import  random_set, features_and_target_arrays
+from model_functions import random_sample,iter_model
 from some_functions import type_of_attribute, get_correlation
 from categorical_fetures_dict import features_dic,text1, text2
 
@@ -18,9 +20,6 @@ df = df.iloc[:,:-4].drop(["Avg_Open_To_Buy", "Total_Amt_Chng_Q4_Q1"],axis=1)
 pre_replacement = df.copy()
 df.replace(features_dic,inplace=True)
 df["Income_Category"].replace(0,df["Income_Category"].mean(),inplace=True)
-
-
-
 
 
 
@@ -51,11 +50,13 @@ if explore_checkbok:
         show_info = st.checkbox('Info')
 
         if show_info:
+
             st.text(info(df))
 
         show_features = st.checkbox('Categorical attributes encoding')
 
         if show_features:
+
             st.json(features_dic)
 
 
@@ -138,10 +139,11 @@ if model_checkbox:
 
         if show_code:
 
-            st.code(inspect.getsource(random_set),language="python")
+            st.code(inspect.getsource(random_sample),language="python")
 
 
     test_checkbox = st.sidebar.checkbox('Test')
+
 
     if test_checkbox:
 
@@ -151,6 +153,70 @@ if model_checkbox:
         att_chosen = st.multiselect('Variables:', df.columns)
 
         m_df = df[att_chosen].copy()
+
+        iteration_box = st.number_input('Number of training iteration')
+
+        number_existing_customers_box = st.number_input('Number of existing customers')
+
+        number_attirited_customer_box = st.number_input('Number of attrited customers')
+
+
+        training_button = st.button("Train")
+
+
+        if training_button:
+
+            with st.spinner("Learning..."):
+
+                random_forest = RandomForestClassifier(random_state=42)
+
+                acc = []
+
+                happy_predict_really_happy = []
+                angry_predict_really_angry = []
+
+                for _ in range(int(iteration_box)):
+
+
+
+
+                    accuracy, confusion_mat = iter_model(m_df,
+
+
+                                                         "Attrition_Flag",
+                                                         int(number_existing_customers_box),
+                                                         int(number_attirited_customer_box),
+                                                         random_forest)
+
+                    acc.append(accuracy)
+
+
+                    true_negative = confusion_mat[0][0] / (confusion_mat[1][0] + confusion_mat[0][0])
+                    true_positive = confusion_mat[1][1] / (confusion_mat[1][1] + confusion_mat[0][1])
+
+                    happy_predict_really_happy.append(true_negative)
+                    angry_predict_really_angry.append(true_positive)
+
+
+
+
+
+
+
+
+
+                st.write(f"Mean of the accuracies: {np.array(acc).mean()}")
+
+
+                st.write(f"Mean of the percentage  right 0 predictions:; {np.array(happy_predict_really_happy).mean()}")
+
+
+                st.write(f"Mean of the percentage  right 1 predictions: {np.array(angry_predict_really_angry).mean()}")
+
+
+
+
+
 
 
 
