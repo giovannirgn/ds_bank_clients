@@ -1,4 +1,4 @@
-# data_science_project_bank_clients
+# Who will close the account?
 
 The number of service providers are being increased very rapidly in every business. In these days, there is no shortage of options for customers in the banking sector when choosing where to allocate their money.As a result, customer churn and engagement has become one of the top issues for most of the banks. 
 
