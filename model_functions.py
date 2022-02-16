@@ -1,12 +1,9 @@
 import pandas as pd
 import numpy as np
 
-from sklearn.utils import shuffle
 
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
-
-import streamlit as st
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix

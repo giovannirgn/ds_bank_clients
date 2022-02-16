@@ -100,7 +100,6 @@ if explore_checkbok:
 
         if density_checkbox:
 
-            st.sidebar.write("Choose the variable")
 
             numeric_features, label_features = type_of_attribute(pre_replacement)
 
@@ -209,23 +208,23 @@ if model_checkbox:
 
 
 
-    random_row_button = st.checkbox("Select random clients")
+        random_row_button = st.checkbox("Select random clients")
 
-    model  = pickle.load(open("model", 'rb'))
+        model  = pickle.load(open("model", 'rb'))
 
-    if random_row_button:
+        if random_row_button:
 
-        sample_df, x, y = select_random_index(df,att_chosen,"Attrition_Flag")
+            sample_df, x, y = select_random_index(df,att_chosen,"Attrition_Flag")
 
-        counter = 0
-        for test_ in x:
+            counter = 0
+            for test_ in x:
 
-            pred = predict(test_.reshape(1,-1),model)
+                pred = predict(test_.reshape(1,-1),model)
 
-            st.write(f"Client ID {sample_df.index[counter]}")
-            st.write(f"Predict: {pred}")
-            st.write(f"Actual: {y[counter]}")
-            counter +=1
+                st.write(f"Client ID {sample_df.index[counter]}")
+                st.write(f"Predict: {pred}")
+                st.write(f"Actual: {y[counter]}")
+                counter +=1
 
 
 
